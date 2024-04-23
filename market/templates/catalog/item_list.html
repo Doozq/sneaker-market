@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <div>
+  {% for item in items %}
+    {% ifchanged %}
+      </div>
+      <h3 style="margin-top:20px;">{{ item.category.name }}</h3>
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% endifchanged %}
+      <div class="col">
+        {% include "includes/item_card.html" %}
+      </div>
+  {% endfor %}
+</div>
+{% endblock content %}

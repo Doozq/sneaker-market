@@ -1,0 +1,27 @@
+<div class="container">
+  <header class="p-3 mb-3 border-bottom">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+        {% load static %}
+        <img src="{% static 'img/efremov.jpg' %}" class="bi me-2" width="40" height="32" role="img" aria-label="Nikitin Efrema">
+      </a>
+
+      
+      {% with request.resolver_match.view_name as view_name %}
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li><a href="{% url 'homepage:home' %}" class="nav-link px-2 {% if view_name == 'homepage:home' %}active{% else  %}link-dark{% endif %}">Главная</a></li>
+        <li><a href="{% url 'catalog:item_list' %}" class="nav-link px-2 {% if view_name == 'catalog:item_list' %}active{% else  %}link-dark{% endif %}">Список товаров</a></li>
+        <li><a href="{% url 'about:about' %}" class="nav-link px-2 {% if view_name == 'about:about' %}active{% else  %}link-dark{% endif %}">О проекте</a></li>
+      </ul>
+      <div class="d-flex">
+        <a href="{% url 'homepage:cart' %}" class="btn btn-outline-primary ms-2">
+          <img src="{% static 'img/cart.png' %}" width="20" height="20">
+        </a>
+        <a href="{% url 'homepage:profile' %}" class="btn btn-outline-primary ms-2">
+          <img src="{% static 'img/profile.png' %}" width="20" height="20">
+        </a>
+      </div>
+      {% endwith %}
+    </div>
+  </header>
+</div>

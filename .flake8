@@ -1,0 +1,8 @@
+[flake8]
+inline-quotes = "
+
+application-import-names = lyceum, homepage, catalog, about, core, feedback, users
+import-order-style = google
+
+exclude =
+    */migrations/
