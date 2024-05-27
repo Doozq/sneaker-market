@@ -3,9 +3,10 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
 from users.models import Profile
-from catalog.models import Cart, CartItem  
+from catalog.models import Cart, CartItem
 
 __all__ = ["ProfileInline", "UserAdmin", "CartAdmin", "CartItemAdmin"]
+
 
 class ProfileInline(admin.StackedInline):
     model = Profile
@@ -23,12 +24,12 @@ class CartItemInline(admin.TabularInline):
 
 
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('user', 'created_at')
+    list_display = ("user", "created_at")
     inlines = (CartItemInline,)
 
 
 class CartItemAdmin(admin.ModelAdmin):
-    list_display = ('id', 'item', 'quantity', 'added_at')
+    list_display = ("id", "item", "quantity", "added_at")
 
 
 # Register the new models with the admin site

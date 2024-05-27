@@ -193,28 +193,39 @@ class Cart(models.Model):
 
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
-    item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True, blank=True)
+    cart = models.ForeignKey(
+        Cart, on_delete=models.CASCADE, related_name="items"
+    )
+    item = models.ForeignKey(
+        Item, on_delete=models.CASCADE, null=True, blank=True
+    )
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
 
+
 class OrderHistory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="orders"
+    )
     order_number = models.CharField(max_length=20, unique=True)
     order_date = models.DateTimeField(auto_now_add=True)
     items = models.TextField()
     total_price = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return f'Заказ #{self.order_number} от {self.order_date}'    
+        return f"Заказ #{self.order_number} от {self.order_date}"
 
 
 class FavoriteItem(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorite_items')
-    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='favorited_by')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="favorite_items"
+    )
+    item = models.ForeignKey(
+        Item, on_delete=models.CASCADE, related_name="favorited_by"
+    )
 
     class Meta:
-        unique_together = ('user', 'item')
+        unique_together = ("user", "item")
 
     def __str__(self):
-        return f'{self.user.username} - {self.item.name}'
+        return f"{self.user.username} - {self.item.name}"

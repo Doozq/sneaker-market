@@ -60,15 +60,16 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 class OrderHistoryAdmin(admin.ModelAdmin):
-    list_display = ('order_number', 'user', 'order_date', 'total_price')
-    list_filter = ('order_date', 'user')
-    search_fields = ('order_number', 'user__username', 'items')
+    list_display = ("order_number", "user", "order_date", "total_price")
+    list_filter = ("order_date", "user")
+    search_fields = ("order_number", "user__username", "items")
+
 
 admin.site.register(catalog.models.OrderHistory, OrderHistoryAdmin)
 
 
 @admin.register(catalog.models.FavoriteItem)
 class FavoriteItemAdmin(admin.ModelAdmin):
-    list_display = ('user', 'item')
-    list_filter = ('user', 'item')
-    search_fields = ('user__username', 'item__name')
+    list_display = ("user", "item")
+    list_filter = ("user", "item")
+    search_fields = ("user__username", "item__name")

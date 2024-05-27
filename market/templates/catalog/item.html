@@ -8,8 +8,8 @@
             <div class="col-md-6">
               <div class="text-start my-5">
                 <h1 class="mb-4">{{ item.name }}</h1>
-                <p class="mb-4">Описание Описание Описание Описание Описание Описание Описание</p>
-                <h3 class="mb-4">9999 руб.</h3>
+                <p class="mb-4">{{ item.text }}</p>
+                <h3 class="mb-4">{{ item.price }} руб.</h3>
                 <form id="add-to-cart-form" method="post" action="{% url 'catalog:add_to_cart' %}">
                   {% csrf_token %}
                   <input type="hidden" name="product_id" value="{{ item.id }}">
