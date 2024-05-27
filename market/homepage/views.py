@@ -7,8 +7,10 @@ __all__ = ["profile", "cart", "home"]
 
 
 def profile(request):
+    user = request.user
+    context = {"user": user}
     template = "homepage/profile.html"
-    return render(request, template)
+    return render(request, template, context)
 
 
 def cart(request):

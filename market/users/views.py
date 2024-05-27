@@ -14,38 +14,10 @@ def signup(request):
     template = "users/signup.html"
     form = RegisterForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
-        username = form.cleaned_data["username"]
-        reg_url = f"http://127.0.0.1:8000/auth/activate/{username}"
-        send_mail(
-            f"Привет {username}",
-            f"Для активации ползователя перейдите по ссылке:\n{reg_url}",
-            settings.FEEDBACK_SENDER,
-            [form.cleaned_data["email"]],
-            fail_silently=False,
-        )
         user = form.save(commit=False)
-        user.is_active = settings.DEFAULT_USER_IS_ACTIVE
         user.save()
         return redirect("users:login")
     context = {"form": form}
-    return render(request, template, context)
-
-
-def activate(request, username):
-    user = User.objects.get(username=username)
-    now = timezone.now()
-    reg_datetime = user.date_joined
-    print(reg_datetime)
-    time = now - reg_datetime
-    if 12 * 60 * 60 > time.total_seconds():
-        user.is_active = True
-        user.save()
-        text = f"Вы активировали аккаунт {username}"
-    else:
-        text = "Истек срок активации (12 часов)"
-
-    template = "users/activate.html"
-    context = {"text": text}
     return render(request, template, context)
 
 

@@ -26,36 +26,7 @@ urlpatterns = [
         ),
         name="password_change_done",
     ),
-    path(
-        "password_reset/",
-        auth.views.PasswordResetView.as_view(
-            template_name="users/password_reset.html",
-        ),
-        name="password_reset",
-    ),
-    path(
-        "password_reset/done/",
-        auth.views.PasswordResetDoneView.as_view(
-            template_name="users/password_reset_done.html",
-        ),
-        name="password_reset_done",
-    ),
-    path(
-        "reset/<uidb64>/<token>/",
-        auth.views.PasswordResetConfirmView.as_view(
-            template_name="users/password_reset_confirm.html",
-        ),
-        name="password_reset_confirm",
-    ),
-    path(
-        "reset/done/",
-        auth.views.PasswordResetCompleteView.as_view(
-            template_name="users/password_reset_complete.html",
-        ),
-        name="password_reset_complete",
-    ),
     path("signup/", users.views.signup, name="signup"),
-    path("activate/<str:username>/", users.views.activate, name="activate"),
     path("users/", users.views.user_list, name="user_list"),
     path("users/<int:pk>/", users.views.user_detail, name="user_detail"),
     path("profile/", users.views.profile, name="profile"),

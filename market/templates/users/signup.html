@@ -11,24 +11,28 @@
       {{ error|escape }}
     {% endfor %}
   {% endif %}
-  <form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-      <div class="form-group" style="margin-top: 15px;">
-        <label for="{{ field.id_for_label }}">
-          {{ field.label }}
-        </label>
-        {% load filters %}
-        {{ field|add_class:"form-control" }}
+  {% if user.is_authenticated %}
+    <p>Вы уже авторизированы. Хотите <a href="{% url 'users:logout' %}">выйти?</a></p>
+  {% else %}
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group" style="margin-top: 15px; max-width: 400px;">
+          <label for="{{ field.id_for_label }}">
+            {{ field.label }}
+          </label>
+          {% load filters %}
+          {{ field|add_class:"form-control" }}
+        </div>
+      {% endfor %}
+      <div style="margin-top: 20px; width: 100%; display: flex; justify-content: space-between; max-width: 400px;">
+        <button type="submit" class="btn btn-primary">
+          Зарегестрироваться
+        </button>
+        <a href="{% url 'users:login' %}" style="text-align: left;">
+          Есть аккаунт?
+        </a>
       </div>
-    {% endfor %}
-    <div style="margin-top: 20px; width: 100%; display: flex; justify-content: space-between">
-      <button type="submit" class="btn btn-primary">
-        Зарегестрироваться
-      </button>
-      <a href="{% url 'users:login' %}" style="text-align: left;">
-        Войти
-      </a>
-    </div>
-  </form>
+    </form>
+  {% endif %}
 {% endblock content %}

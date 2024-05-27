@@ -14,15 +14,6 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "REALY_SECRET")
 DEBUG_ENV = os.getenv("DJANGO_DEBUG", "false").lower()
 DEBUG = DEBUG_ENV in ("true", "yes", "t", "y", "1")
 
-USER_IS_ACTIVATE_DEFAULT_VALUE = "False"
-if DEBUG:
-    USER_IS_ACTIVATE_DEFAULT_VALUE = "True"
-
-DEFAULT_USER_IS_ACTIVE = os.getenv(
-    "DEFAULT_USER_IS_ACTIVE",
-    USER_IS_ACTIVATE_DEFAULT_VALUE,
-).lower() in ("true", "yes", "t", "y", "1")
-
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")
 
 INSTALLED_APPS = [
@@ -52,7 +43,6 @@ MIDDLEWARE = [
 ]
 
 if DEBUG is True:
-    response_count = 0
     INSTALLED_APPS.append("debug_toolbar")
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 
@@ -120,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-LOGIN_URL = "auth/login"
+LOGIN_URL = "/auth/login"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/auth/login"
 
@@ -142,8 +132,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
-
-
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-
-EMAIL_FILE_PATH = BASE_DIR / "send_mail"
