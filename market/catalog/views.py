@@ -1,9 +1,14 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse
 import catalog.models
-from catalog.models import Cart, CartItem, Item
+from catalog.models import Cart, CartItem, Item, FavoriteItem
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+import json
+import logging
 
 __all__ = ["item_detail", "item_list"]
 
@@ -56,3 +61,30 @@ def add_to_cart(request):
         cart_item.save()
 
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+@csrf_exempt
+@require_POST
+def favorite_toggle(request):
+
+    data = json.loads(request.body)
+    item_id = data.get('item_id')
+    user = request.user
+
+    item = Item.objects.get(pk=item_id)
+
+    favorite_item, created = FavoriteItem.objects.get_or_create(user=user, item=item)
+
+    if created:
+        return JsonResponse({'status': 'added'})
+    else:
+        favorite_item.delete()
+        return JsonResponse({'status': 'removed'})
+    
+@login_required
+def favorite_remove(request, pk):
+    item = get_object_or_404(Item, pk=pk)
+    favorite_item = FavoriteItem.objects.filter(user=request.user, item=item).first()
+    if favorite_item:
+        favorite_item.delete()
+    return redirect('users:profile')    

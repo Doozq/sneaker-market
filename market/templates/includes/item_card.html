@@ -1,9 +1,58 @@
 <a href="{% url 'catalog:item_detail' item.pk %}" class="card-link">
-  <div class="card">
+  <div class="card position-relative">
     <img src="{{ item.item_main_image.image.url }}" class="card-img-top">
     <div class="card-body">
       <h5 class="card-title">{{ item.name }}</h5>
-      <p class="card-text">{{ item.price }}</p>
+      <p class="card-text">{{ item.price }} руб</p>
     </div>
+    <a href="#" class="position-absolute bottom-0 end-0 m-3 favorite-toggle" data-item-id="{{ item.pk }}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="grey" width="24px" height="24px">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+      </svg>
+    </a>
   </div>
 </a>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const csrftoken = '{{ csrf_token }}';
+
+      // Use a unique class to ensure we do not add multiple event listeners
+      document.querySelectorAll('.favorite-toggle').forEach(function(element) {
+          if (!element.classList.contains('favorite-toggle-handled')) {
+              element.classList.add('favorite-toggle-handled');
+
+              element.addEventListener('click', function(event) {
+                  event.preventDefault();
+                  const itemId = this.dataset.itemId;
+                  const svg = this.querySelector('svg');
+
+                  fetch("{% url 'catalog:favorite_toggle' %}", {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                          'X-CSRFToken': csrftoken,
+                      },
+                      body: JSON.stringify({ item_id: itemId }),
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      console.log('Response data:', data);  // Log the response data
+                      if (data.status === 'added') {
+                          svg.setAttribute('fill', 'red');
+                      } else if (data.status === 'removed') {
+                          svg.setAttribute('fill', 'grey');
+                      } else {
+                          console.error('Unexpected response:', data);
+                          alert(data.message);  // Alert the error message
+                      }
+                  })
+                  .catch(error => {
+                      console.error('Fetch error:', error);
+                  });
+              });
+          }
+      });
+  });
+</script>

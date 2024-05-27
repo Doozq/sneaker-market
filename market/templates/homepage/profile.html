@@ -45,7 +45,29 @@
         <div class="card mb-4">
           <div class="card-body">
             <h5 class="card-title">Избранные товары</h5>
-            <!-- Добавьте сюда содержимое для избранных товаров, если нужно -->
+            <div class="row">
+              {% for favorite in user.favorite_items.all %}
+              <div class="col-md-4">
+                <a href="{% url 'catalog:item_detail' favorite.item.pk %}" class="card-link">
+                  <div class="card position-relative">
+                    <img src="{{ favorite.item.item_main_image.image.url }}" class="card-img-top">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ favorite.item.name }}</h5>
+                      <p class="card-text">{{ favorite.item.price }} руб</p>
+                    </div>
+                    <a href="#" class="position-absolute bottom-0 end-0 m-3 favorite-toggle" data-item-id="{{ favorite.item.pk }}">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="red" width="24px" height="24px">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                      </svg>
+                    </a>
+                  </div>
+                </a>
+              </div>
+              {% empty %}
+              <p>У вас еще нет избранных товаров.</p>
+              {% endfor %}
+            </div>
           </div>
         </div>
       </div>
@@ -55,3 +77,46 @@
     <meta http-equiv="refresh" content="0; url={{ the_url }}">
   {% endif %}
 {% endblock %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const csrftoken = '{{ csrf_token }}';
+
+      // Use a unique class to ensure we do not add multiple event listeners
+      document.querySelectorAll('.favorite-toggle').forEach(function(element) {
+          if (!element.classList.contains('favorite-toggle-handled')) {
+              element.classList.add('favorite-toggle-handled');
+
+              element.addEventListener('click', function(event) {
+                  event.preventDefault();
+                  const itemId = this.dataset.itemId;
+                  const svg = this.querySelector('svg');
+
+                  fetch("{% url 'catalog:favorite_toggle' %}", {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                          'X-CSRFToken': csrftoken,
+                      },
+                      body: JSON.stringify({ item_id: itemId }),
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      console.log('Response data:', data);  // Log the response data
+                      if (data.status === 'added') {
+                          svg.setAttribute('fill', 'red');
+                      } else if (data.status === 'removed') {
+                          svg.setAttribute('fill', 'grey');
+                      } else {
+                          console.error('Unexpected response:', data);
+                          alert(data.message);  // Alert the error message
+                      }
+                  })
+                  .catch(error => {
+                      console.error('Fetch error:', error);
+                  });
+              });
+          }
+      });
+  });
+</script>

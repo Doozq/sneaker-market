@@ -202,8 +202,19 @@ class OrderHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     order_number = models.CharField(max_length=20, unique=True)
     order_date = models.DateTimeField(auto_now_add=True)
-    items = models.TextField()  # Мы будем хранить список товаров как текст
+    items = models.TextField()
     total_price = models.PositiveIntegerField(default=1)
-    
+
     def __str__(self):
         return f'Заказ #{self.order_number} от {self.order_date}'    
+
+
+class FavoriteItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorite_items')
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='favorited_by')
+
+    class Meta:
+        unique_together = ('user', 'item')
+
+    def __str__(self):
+        return f'{self.user.username} - {self.item.name}'

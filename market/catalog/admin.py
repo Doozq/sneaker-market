@@ -65,3 +65,10 @@ class OrderHistoryAdmin(admin.ModelAdmin):
     search_fields = ('order_number', 'user__username', 'items')
 
 admin.site.register(catalog.models.OrderHistory, OrderHistoryAdmin)
+
+
+@admin.register(catalog.models.FavoriteItem)
+class FavoriteItemAdmin(admin.ModelAdmin):
+    list_display = ('user', 'item')
+    list_filter = ('user', 'item')
+    search_fields = ('user__username', 'item__name')
