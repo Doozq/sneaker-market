@@ -1,16 +1,58 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-  <div>
-  {% for item in items %}
-    {% ifchanged %}
-      </div>
-      <h3 style="margin-top:20px;">{{ item.category.name }}</h3>
-      <div class="row row-cols-1 row-cols-md-3 g-4">
-    {% endifchanged %}
-      <div class="col">
-        {% include "includes/item_card.html" %}
-      </div>
-  {% endfor %}
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#searchOptions" aria-expanded="false" aria-controls="searchOptions">
+                Показать настройки поиска
+            </button>
+            <div class="collapse" id="searchOptions">
+                <div class="card card-body mt-3">
+                    <form method="get">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="model">Модель</label>
+                                    <input type="text" class="form-control" id="model" name="model" placeholder="Введите модель">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="brand">Бренд</label>
+                                    <input type="text" class="form-control" id="brand" name="brand" placeholder="Введите бренд">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="color">Цвет</label>
+                                    <input type="text" class="form-control" id="color" name="color" placeholder="Введите цвет">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="price">Цена</label>
+                                    <input type="number" class="form-control" id="price-from" name="price-from" placeholder="От">
+                                    <input type="number" class="form-control" id="price-to" name="price-to" placeholder="До">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Поиск</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        {% for item in items %}
+        {% ifchanged %}
+        </div>
+        <h3 style="margin-top:20px;">{{ item.category.name }}</h3>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% endifchanged %}
+        <div class="col">
+            {% include "includes/item_card.html" %}
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock content %}
