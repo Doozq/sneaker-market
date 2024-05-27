@@ -191,3 +191,13 @@ class CartItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
+
+class OrderHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    order_number = models.CharField(max_length=20, unique=True)
+    order_date = models.DateTimeField(auto_now_add=True)
+    items = models.TextField()  # Мы будем хранить список товаров как текст
+    total_price = models.PositiveIntegerField(default=1)
+    
+    def __str__(self):
+        return f'Заказ #{self.order_number} от {self.order_date}'    

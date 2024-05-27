@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse
 import catalog.models
 from catalog.models import Cart, CartItem, Item
@@ -21,6 +21,7 @@ def item_detail(request, pk):
     template = "catalog/item.html"
     context = {"item": item}
     return render(request, template, context)
+
 @login_required
 @require_POST
 def add_to_cart(request):
@@ -37,4 +38,4 @@ def add_to_cart(request):
         cart_item.quantity += quantity
         cart_item.save()
 
-    return JsonResponse({'status': 'success'})
+    return redirect(request.META.get('HTTP_REFERER'))
