@@ -41,8 +41,11 @@ def cart_view(request):
 
 def home(request):
     items = catalog.models.Item.objects.on_main()
+    favorite_item = request.user.favorite_items.all() if request.user.is_authenticated else []
+    favorite_items = [item.item for item in favorite_item]
     template = "homepage/main.html"
-    context = {"items": items}
+    context = {"items": items,
+               'favorite_items': favorite_items,}
     return render(request, template, context)
 
 def checkout_view(request):

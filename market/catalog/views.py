@@ -81,6 +81,7 @@ def favorite_toggle(request):
         favorite_item.delete()
         return JsonResponse({'status': 'removed'})
     
+    
 @login_required
 def favorite_remove(request, pk):
     item = get_object_or_404(Item, pk=pk)
