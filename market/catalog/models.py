@@ -2,8 +2,10 @@ import django.core.validators
 import django.db.models
 from django.utils.html import mark_safe
 from sorl.thumbnail import get_thumbnail
-
+from django.db import models
 from core.models import AbstractModel
+
+from users.models import User
 
 __all__ = ["Category", "GalleryImage", "MainImage", "Item", "Tag"]
 
@@ -177,3 +179,15 @@ class Item(AbstractModel):
     class Meta:
         verbose_name = "товар"
         verbose_name_plural = "товары"
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
+    product_id = models.IntegerField()
+    quantity = models.PositiveIntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)

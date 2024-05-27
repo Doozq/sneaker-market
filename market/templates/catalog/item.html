@@ -10,8 +10,9 @@
                 <h1 class="mb-4">{{ item.name }}</h1>
                 <p class="mb-4">Описание Описание Описание Описание Описание Описание Описание</p>
                 <h3 class="mb-4">9999 руб.</h3>
-                <form method="post">
+                <form id="add-to-cart-form" method="post" action="{% url 'catalog:add_to_cart' %}">
                   {% csrf_token %}
+                  <input type="hidden" name="product_id" value="{{ item.id }}">
                   <button type="submit" class="btn btn-primary">Добавить в корзину</button>
                 </form>
               </div>
@@ -31,4 +32,31 @@
         </div>
       </div>
     </div>
+
+    
 {% endblock content %}
+<script>
+  document.getElementById('add-to-cart-form').onsubmit = function(event) {
+      event.preventDefault();
+
+      const form = event.target;
+      const formData = new FormData(form);
+
+      fetch(form.action, {
+          method: form.method,
+          body: formData,
+          headers: {
+              'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+          }
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.status === 'success') {
+              alert('Товар добавлен в корзину!');
+          } else {
+              alert('Не удалось добавить товар в корзину.');
+          }
+      })
+      .catch(error => console.error('Error:', error));
+  };
+</script>
