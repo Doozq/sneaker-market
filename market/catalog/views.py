@@ -32,8 +32,12 @@ def item_list(request):
         items = items.filter(price__gte=price_min)
     if price_max:
         items = items.filter(price__lte=price_max)
+
+    favorite_item = request.user.favorite_items.all() if request.user.is_authenticated else []
+    favorite_items = [item.item for item in favorite_item]    
     template = "catalog/item_list.html"
-    context = {"items": items, "is_search": is_search}
+    context = {"items": items, "is_search": is_search,
+               'favorite_items': favorite_items,}
     return render(request, template, context)
 
 
