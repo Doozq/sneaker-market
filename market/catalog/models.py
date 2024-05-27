@@ -149,6 +149,12 @@ class ItemManager(django.db.models.Manager):
 class Item(AbstractModel):
     objects = ItemManager()
     price = models.PositiveIntegerField(default=1)
+    color = django.db.models.CharField(
+        "Цвет",
+        max_length=150,
+        help_text="Перечислите цвета",
+        default="",
+    )
     is_on_main = django.db.models.BooleanField(default=False)
     category = django.db.models.ForeignKey(
         "category",

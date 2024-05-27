@@ -9,7 +9,10 @@ __all__ = ["profile", "cart", "home"]
 
 def profile(request):
     user = request.user
-    orders = OrderHistory.objects.filter(user=request.user).order_by('-order_date')
+    if user.is_authenticated:
+        orders = OrderHistory.objects.filter(user=user).order_by('-order_date')
+    else:
+        orders = []
     context = {"user": user,
                'orders': orders}
     template = "homepage/profile.html"

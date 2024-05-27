@@ -10,8 +10,25 @@ __all__ = ["item_detail", "item_list"]
 
 def item_list(request):
     items = catalog.models.Item.objects.published()
+
+    model = request.GET.get('model')
+    brand = request.GET.get('brand')
+    color = request.GET.getlist('color')
+    price_min = request.GET.get('price_min')
+    price_max = request.GET.get('price_max')
+    is_search = any((model, brand, color, price_min, price_max))
+    if model:
+        items = items.filter(name__icontains=model)
+    if brand:
+        items = items.filter(category__name__icontains=brand)
+    if color:
+        items = items.filter(color__in=color)
+    if price_min:
+        items = items.filter(price__gte=price_min)
+    if price_max:
+        items = items.filter(price__lte=price_max)
     template = "catalog/item_list.html"
-    context = {"items": items}
+    context = {"items": items, "is_search": is_search}
     return render(request, template, context)
 
 

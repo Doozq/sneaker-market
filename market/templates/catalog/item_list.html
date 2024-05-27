@@ -13,46 +13,127 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="model">Модель</label>
-                                    <input type="text" class="form-control" id="model" name="model" placeholder="Введите модель">
+                                    <input type="text" class="form-control" style="margin-top: 5px" id="model" name="model" value="{{ request.GET.model }}">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="brand">Бренд</label>
-                                    <input type="text" class="form-control" id="brand" name="brand" placeholder="Введите бренд">
+                                    <input type="text" class="form-control" style="margin-top: 5px" id="brand" name="brand" value="{{ request.GET.brand }}">
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="color">Цвет</label>
-                                    <input type="text" class="form-control" id="color" name="color" placeholder="Введите цвет">
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" onclick="toggleDropdown()">
+                                            Выберите цвет
+                                        </button>
+                                        <div class="dropdown-menu" id="colorDropdown" onclick="event.stopPropagation()">
+                                            <div class="dropdown-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="color" value="red" id="colorRed">
+                                                    <label class="form-check-label" for="colorRed">
+                                                    Красный
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="color" value="blue" id="colorBlue">
+                                                    <label class="form-check-label" for="colorBlue">
+                                                    Синий
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="color" value="green" id="colorGreen">
+                                                    <label class="form-check-label" for="colorGreen">
+                                                    Зеленый
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="price">Цена</label>
-                                    <input type="number" class="form-control" id="price-from" name="price-from" placeholder="От">
-                                    <input type="number" class="form-control" id="price-to" name="price-to" placeholder="До">
+                                    <input type="number" class="form-control" style="margin-top: 5px" id="price_min" name="price_min" placeholder="От" value="{{ request.GET.price_min }}">
+                                    <input type="number" class="form-control" style="margin-top: 5px" id="price_max" name="price_max" placeholder="До" value="{{ request.GET.price_max }}">
                                 </div>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Поиск</button>
                     </form>
+                    <style>
+                        .dropdown {
+                          position: relative;
+                          display: inline-block;
+                        }
+                      
+                        .dropdown-menu {
+                          display: none;
+                          position: absolute;
+                          background-color: #f9f9f9;
+                          min-width: 160px;
+                          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                          z-index: 1;
+                        }
+                      
+                        .dropdown-menu.show {
+                          display: block;
+                        }
+                      </style>
+                      
+                      <script>
+                        function toggleDropdown() {
+                            event.preventDefault();
+                            var dropdownMenu = document.getElementById("colorDropdown");
+                            dropdownMenu.classList.toggle("show");
+                        }
+                      
+                        window.onclick = function(event) {
+                            if (!event.target.matches('.dropdown-toggle')) {
+                                var dropdowns = document.getElementsByClassName("dropdown-menu");
+                                for (var i = 0; i < dropdowns.length; i++) {
+                                    var openDropdown = dropdowns[i];
+                                        if (openDropdown.classList.contains('show')) {
+                                            openDropdown.classList.remove('show');
+                                    }
+                                }
+                            }
+                        }
+                      </script>
                 </div>
             </div>
         </div>
     </div>
     <div>
-        {% for item in items %}
-        {% ifchanged %}
-        </div>
-        <h3 style="margin-top:20px;">{{ item.category.name }}</h3>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% endifchanged %}
-        <div class="col">
-            {% include "includes/item_card.html" %}
-        </div>
-        {% endfor %}
+        {% if not is_search %}
+            {% for item in items %}
+                {% ifchanged %}
+                    </div>
+                    <h3 style="margin-top:20px;">{{ item.category.name }}</h3>
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% endifchanged %}
+                <div class="col">
+                    {% include "includes/item_card.html" %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <h3 style="margin-top:20px;">Результаты поиска</h3>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for item in items %}
+                <div class="col">
+                    {% include "includes/item_card.html" %}
+                </div>
+            {% empty %}
+                <p>Нет результатов по данному запросу</p>
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 {% endblock content %}

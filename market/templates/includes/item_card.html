@@ -1,9 +1,9 @@
 <a href="{% url 'catalog:item_detail' item.pk %}" class="card-link">
-    <div class="card">
-      <img src="{{ item.item_main_image.image.url }}" class="card-img-top">
-      <div class="card-body">
-        <h5 class="card-title">{{ item.name }}</h5>
-        <p class="card-text">9999 руб.</p>
-      </div>
+  <div class="card">
+    <img src="{{ item.item_main_image.image.url }}" class="card-img-top">
+    <div class="card-body">
+      <h5 class="card-title">{{ item.name }}</h5>
+      <p class="card-text">{{ item.price }}</p>
     </div>
+  </div>
 </a>
