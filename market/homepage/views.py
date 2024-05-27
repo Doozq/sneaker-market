@@ -19,16 +19,12 @@ def profile(request):
     return render(request, template, context)
 
 
-def cart(request):
-    items = catalog.models.Item.objects.on_main()
-    template = "homepage/cart.html"
-    context = {"items": items}
-    return render(request, template, context)
-
-
 def cart_view(request):
     user = request.user
-    cart_items = CartItem.objects.filter(cart__user=request.user)
+    if user.is_authenticated:
+        cart_items = CartItem.objects.filter(cart__user=request.user)
+    else:
+        cart_items = []
     total_price = sum(item.item.price * item.quantity for item in cart_items)
     template = "homepage/cart.html"
     context = {

@@ -32,7 +32,7 @@
                                         <div class="dropdown-menu" id="colorDropdown" onclick="event.stopPropagation()">
                                             <div class="dropdown-item">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="color" value="red" id="colorRed">
+                                                    <input class="form-check-input" type="checkbox" name="color" value="красный" id="colorRed" {% if "красный" in color %}checked{% endif %}>
                                                     <label class="form-check-label" for="colorRed">
                                                     Красный
                                                     </label>
@@ -40,7 +40,7 @@
                                             </div>
                                             <div class="dropdown-item">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="color" value="blue" id="colorBlue">
+                                                    <input class="form-check-input" type="checkbox" name="color" value="синий" id="colorBlue" {% if "синий" in color %}checked{% endif %}>
                                                     <label class="form-check-label" for="colorBlue">
                                                     Синий
                                                     </label>
@@ -48,9 +48,33 @@
                                             </div>
                                             <div class="dropdown-item">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="color" value="green" id="colorGreen">
+                                                    <input class="form-check-input" type="checkbox" name="color" value="зеленый" id="colorGreen"  {% if "зеленый" in color %}checked{% endif %}>
                                                     <label class="form-check-label" for="colorGreen">
                                                     Зеленый
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="color" value="белый" id="colorWhite"  {% if "белый" in color %}checked{% endif %}>
+                                                    <label class="form-check-label" for="colorWhite">
+                                                    Белый
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="color" value="бежевый" id="colorBeige"  {% if "бежевый" in color %}checked{% endif %}>
+                                                    <label class="form-check-label" for="colorBeige">
+                                                    Бежевый
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="color" value="черный" id="colorBlack"  {% if "черный" in color %}checked{% endif %}>
+                                                    <label class="form-check-label" for="colorBlack">
+                                                    Черный
                                                     </label>
                                                 </div>
                                             </div>

@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 import json
-import logging
+from django.db.models import Q
 
 __all__ = ["item_detail", "item_list"]
 
@@ -19,6 +19,7 @@ def item_list(request):
     model = request.GET.get('model')
     brand = request.GET.get('brand')
     color = request.GET.getlist('color')
+    print(request.GET.getlist('color'))
     price_min = request.GET.get('price_min')
     price_max = request.GET.get('price_max')
     is_search = any((model, brand, color, price_min, price_max))
@@ -27,7 +28,10 @@ def item_list(request):
     if brand:
         items = items.filter(category__name__icontains=brand)
     if color:
-        items = items.filter(color__in=color)
+        query = Q()
+        for c in color:
+            query |= Q(color__contains=c)
+        items = items.filter(query)
     if price_min:
         items = items.filter(price__gte=price_min)
     if price_max:
@@ -37,7 +41,7 @@ def item_list(request):
     favorite_items = [item.item for item in favorite_item]    
     template = "catalog/item_list.html"
     context = {"items": items, "is_search": is_search,
-               'favorite_items': favorite_items,}
+               'favorite_items': favorite_items, 'color': color}
     return render(request, template, context)
 
 
