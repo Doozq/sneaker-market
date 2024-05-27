@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import JsonResponse
 import catalog.models
-from catalog.models import Cart, CartItem
+from catalog.models import Cart, CartItem, Item
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 
@@ -25,10 +25,13 @@ def item_detail(request, pk):
 @require_POST
 def add_to_cart(request):
     product_id = request.POST.get('product_id')
-    quantity = 1  # Default quantity to 1 as per the single button functionality
+    quantity = 1 
+
+    product = get_object_or_404(Item, id=product_id)
 
     cart, created = Cart.objects.get_or_create(user=request.user)
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product_id=product_id)
+
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, item=product)
     
     if not created:
         cart_item.quantity += quantity

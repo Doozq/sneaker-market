@@ -148,7 +148,7 @@ class ItemManager(django.db.models.Manager):
 
 class Item(AbstractModel):
     objects = ItemManager()
-
+    price = models.PositiveIntegerField(default=1)
     is_on_main = django.db.models.BooleanField(default=False)
     category = django.db.models.ForeignKey(
         "category",
@@ -188,6 +188,6 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
-    product_id = models.IntegerField()
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)

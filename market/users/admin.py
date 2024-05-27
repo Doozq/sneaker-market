@@ -28,7 +28,7 @@ class CartAdmin(admin.ModelAdmin):
 
 
 class CartItemAdmin(admin.ModelAdmin):
-    list_display = ('cart', 'product_id', 'quantity', 'added_at')
+    list_display = ('id', 'item', 'quantity', 'added_at')
 
 
 # Register the new models with the admin site

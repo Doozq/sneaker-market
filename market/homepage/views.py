@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 import catalog.models
-
+from catalog.models import CartItem
 
 __all__ = ["profile", "cart", "home"]
 
@@ -19,6 +19,15 @@ def cart(request):
     context = {"items": items}
     return render(request, template, context)
 
+
+def cart_view(request):
+    cart_items = CartItem.objects.filter(cart__user=request.user)
+    total_price = sum(item.item.price * item.quantity for item in cart_items)
+    context = {
+        'items': cart_items,
+        'total_price': total_price,
+    }
+    return render(request, 'homepage/cart.html', context)
 
 def home(request):
     items = catalog.models.Item.objects.on_main()
