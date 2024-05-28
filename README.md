@@ -1,18 +1,12 @@
 ## Установка
-- Установите и активируйте виртуальное окружение
+- Установите и активируйте виртуальное окружение с зависимостями
 ```
-pip install venv
-python -m venv venv
-source venv/bin/activate
-```
-
-## Установка зависимости из файла requirements.txt
-```
-pip install -r requirements.txt
+conda env create --file environment.yml
+conda activate shop
 ```
 
 ## Запуск
-- В папке с файлом manage.py выполить команду:
+- В папке market выполнить команду:
 ```
 python manage.py runserver
 ```
